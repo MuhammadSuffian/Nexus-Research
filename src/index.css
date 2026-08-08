@@ -1,0 +1,88 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap');
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "Inter", ui-sans-serif, system-ui, -apple-system, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, monospace;
+
+  /* Dark-mode palette — professional research dashboard */
+  --color-primary: oklch(0.62 0.19 260);        /* Blue-indigo accent */
+  --color-primary-hover: oklch(0.68 0.18 260);
+  --color-on-primary: oklch(0.98 0 0);           /* White text on primary */
+  --color-secondary: oklch(0.55 0.12 260);       /* Muted blue */
+  --color-accent: oklch(0.65 0.18 250);          /* CTA blue */
+
+  --color-background: oklch(0.13 0.01 260);      /* Near-black with blue tint */
+  --color-surface: oklch(0.17 0.01 260);          /* Card/panel background */
+  --color-surface-elevated: oklch(0.21 0.01 260); /* Elevated surfaces */
+
+  --color-foreground: oklch(0.92 0.01 260);      /* Body text — off-white */
+  --color-muted: oklch(0.55 0.02 260);            /* Secondary text */
+  --color-muted-foreground: oklch(0.65 0.02 260);
+
+  --color-border: oklch(0.25 0.02 260);           /* Subtle borders */
+  --color-border-strong: oklch(0.32 0.02 260);
+
+  --color-destructive: oklch(0.55 0.2 25);        /* Red for errors */
+  --color-destructive-hover: oklch(0.6 0.2 25);
+
+  --color-ring: oklch(0.62 0.19 260);             /* Focus ring */
+
+  --color-success: oklch(0.6 0.18 155);           /* Green for success */
+  --color-warning: oklch(0.65 0.16 80);           /* Amber for warnings */
+
+  /* Spacing */
+  --spacing: 0.25rem;
+
+  /* Border radius */
+  --radius-sm: 0.375rem;
+  --radius-md: 0.5rem;
+  --radius-lg: 0.75rem;
+  --radius-xl: 1rem;
+}
+
+/* Base layer */
+@layer base {
+  html {
+    @apply bg-background text-foreground antialiased;
+  }
+
+  body {
+    @apply min-h-screen;
+    font-feature-settings: "cv02", "cv03", "cv04", "cv11";
+  }
+
+  /* Scrollbar styling for dark theme */
+  ::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+  ::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  ::-webkit-scrollbar-thumb {
+    background: oklch(0.3 0.02 260);
+    border-radius: 3px;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background: oklch(0.4 0.02 260);
+  }
+}
+
+/* Animation keyframes */
+@keyframes fadeSlideIn {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Utility classes */
+@utility scrollbar-thin {
+  scrollbar-width: thin;
+  scrollbar-color: oklch(0.3 0.02 260) transparent;
+}
