@@ -81,7 +81,7 @@ async function sendToGroq(
       Authorization: `Bearer ${GROQ_API_KEY}`,
     },
     body: JSON.stringify({
-      model: 'llama-3.1-70b-versatile',
+      model: 'llama-3.3-70b-versatile',
       messages: [
         { role: 'system', content: systemPrompt },
         ...messages.map((m) => ({ role: m.role, content: m.content })),
@@ -96,7 +96,8 @@ async function sendToGroq(
     let msg = `Groq API error ${response.status}`;
     try {
       const err = await response.json();
-      msg = err.error?.message ?? msg;
+      console.error('Groq error response:', err);
+      msg = err.error?.message ?? err.message ?? msg;
     } catch { /* ignore */ }
     throw new Error(msg);
   }
