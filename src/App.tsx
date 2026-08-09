@@ -48,8 +48,34 @@ function TabContent({
 
     case 'mindmap': {
       const mindmapOutput = result.synthesisOutputs.find((o) => o.tab_type === 'mindmap');
-      const mindmapContent = mindmapOutput?.content as MindmapContent | undefined;
-      if (!mindmapContent || !mindmapContent.nodes?.length) {
+      let mindmapContent = mindmapOutput?.content as MindmapContent | undefined;
+
+      // Fallback: build a basic mindmap from sources + synthesis if LLM returned empty
+      if (!mindmapContent?.nodes?.length && result.sources.length > 0) {
+        const synthOutput = result.synthesisOutputs.find((o) => o.tab_type === 'synthesis');
+        const synthesis = synthOutput?.content as { keyFindings?: string[] } | null;
+
+        const nodes: MindmapContent['nodes'] = [
+          { id: 'n0', label: result.query.slice(0, 40), group: 'core' },
+          ...result.sources.slice(0, 8).map((s, i) => ({
+            id: `np${i}`,
+            label: s.title?.slice(0, 50) ?? `Paper ${i + 1}`,
+            group: 'paper',
+          })),
+          ...(synthesis?.keyFindings ?? []).slice(0, 4).map((f, i) => ({
+            id: `nf${i}`,
+            label: f.slice(0, 50),
+            group: 'finding',
+          })),
+        ];
+        const edges: MindmapContent['edges'] = [
+          ...result.sources.slice(0, 8).map((_, i) => ({ from: 'n0', to: `np${i}` })),
+          ...(synthesis?.keyFindings ?? []).slice(0, 4).map((_, i) => ({ from: 'n0', to: `nf${i}` })),
+        ];
+        mindmapContent = { nodes, edges };
+      }
+
+      if (!mindmapContent?.nodes?.length) {
         return (
           <div className="flex items-center justify-center py-20 text-sm text-muted">
             No mindmap data available.

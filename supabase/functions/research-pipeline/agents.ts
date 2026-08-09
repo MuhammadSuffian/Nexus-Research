@@ -199,10 +199,10 @@ ${paperList}
 
 Create a mindmap. Return JSON only.`;
 
-  const raw = await chatFast([
+  const raw = await chat([
     { role: "system", content: system },
     { role: "user", content: user },
-  ], 3072);
+  ]);
 
   const parsed = tryParseJson(raw);
   return {
