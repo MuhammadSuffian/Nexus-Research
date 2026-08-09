@@ -50,8 +50,15 @@ function TabContent({
       const mindmapOutput = result.synthesisOutputs.find((o) => o.tab_type === 'mindmap');
       let mindmapContent = mindmapOutput?.content as MindmapContent | undefined;
 
+      // Debug
+      console.log('[Mindmap] synthesisOutputs:', result.synthesisOutputs);
+      console.log('[Mindmap] mindmapOutput:', mindmapOutput);
+      console.log('[Mindmap] mindmapContent:', mindmapContent);
+      console.log('[Mindmap] sources.length:', result.sources.length);
+
       // Fallback: build a basic mindmap from sources + synthesis if LLM returned empty
       if (!mindmapContent?.nodes?.length && result.sources.length > 0) {
+        console.log('[Mindmap] Using fallback');
         const synthOutput = result.synthesisOutputs.find((o) => o.tab_type === 'synthesis');
         const synthesis = synthOutput?.content as { keyFindings?: string[] } | null;
 
@@ -73,6 +80,7 @@ function TabContent({
           ...(synthesis?.keyFindings ?? []).slice(0, 4).map((_, i) => ({ from: 'n0', to: `nf${i}` })),
         ];
         mindmapContent = { nodes, edges };
+        console.log('[Mindmap] Fallback nodes built:', nodes.length);
       }
 
       if (!mindmapContent?.nodes?.length) {
