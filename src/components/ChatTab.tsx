@@ -61,34 +61,42 @@ Answer in a clear, informative style. Use markdown for structure when helpful.`;
 // Groq chat call (direct from frontend)
 // ---------------------------------------------------------------------------
 
-const GROQ_API_KEY = import.meta.env.VITE_GROQ_API_KEY as string | undefined;
 
 async function sendToGroq(
   messages: Message[],
   systemPrompt: string,
   signal: AbortSignal,
 ): Promise<string> {
-  if (!GROQ_API_KEY) {
+  // Read key fresh each call (not at module load) so hot-reload picks up changes
+  const apiKey = (import.meta.env.VITE_GROQ_API_KEY as string | undefined)?.trim();
+
+  console.log('[Chat] API key prefix:', apiKey ? apiKey.slice(0, 10) + '...' : 'MISSING');
+
+  if (!apiKey) {
     throw new Error(
-      'VITE_GROQ_API_KEY is not set. Add it to your .env file to enable the chat.',
+      'VITE_GROQ_API_KEY is not set. Add it to your .env file and restart the dev server.',
     );
   }
+
+  const body = {
+    model: 'llama-3.3-70b-versatile',
+    messages: [
+      { role: 'system', content: systemPrompt },
+      ...messages.map((m) => ({ role: m.role, content: m.content })),
+    ],
+    temperature: 0.4,
+    max_tokens: 1024,
+  };
+
+  console.log('[Chat] Sending request with model:', body.model);
 
   const response = await fetch('https://api.groq.com/openai/v1/chat/completions', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
-      Authorization: `Bearer ${GROQ_API_KEY}`,
+      Authorization: `Bearer ${apiKey}`,
     },
-    body: JSON.stringify({
-      model: 'llama-3.3-70b-versatile',
-      messages: [
-        { role: 'system', content: systemPrompt },
-        ...messages.map((m) => ({ role: m.role, content: m.content })),
-      ],
-      temperature: 0.4,
-      max_tokens: 1024,
-    }),
+    body: JSON.stringify(body),
     signal,
   });
 
@@ -96,7 +104,7 @@ async function sendToGroq(
     let msg = `Groq API error ${response.status}`;
     try {
       const err = await response.json();
-      console.error('Groq error response:', err);
+      console.error('[Chat] Full Groq error:', JSON.stringify(err, null, 2));
       msg = err.error?.message ?? err.message ?? msg;
     } catch { /* ignore */ }
     throw new Error(msg);
@@ -120,9 +128,8 @@ function MessageBubble({ message, index }: { message: Message; index: number }) 
     >
       {/* Avatar */}
       <div
-        className={`flex h-7 w-7 shrink-0 items-center justify-center rounded-full ${
-          isUser ? 'bg-primary/20' : 'bg-surface-elevated border border-border'
-        }`}
+        className={`flex h-7 w-7 shrink-0 items-center justify-center rounded-full ${isUser ? 'bg-primary/20' : 'bg-surface-elevated border border-border'
+          }`}
       >
         {isUser ? (
           <User className="h-3.5 w-3.5 text-primary" />
@@ -133,11 +140,10 @@ function MessageBubble({ message, index }: { message: Message; index: number }) 
 
       {/* Bubble */}
       <div
-        className={`max-w-[80%] rounded-2xl px-4 py-3 text-sm leading-relaxed ${
-          isUser
+        className={`max-w-[80%] rounded-2xl px-4 py-3 text-sm leading-relaxed ${isUser
             ? 'rounded-tr-sm bg-primary/15 text-foreground'
             : 'rounded-tl-sm bg-surface border border-border text-muted-foreground'
-        }`}
+          }`}
       >
         {message.content.split('\n').map((line, i) => (
           <p key={i} className={line === '' ? 'h-3' : ''}>
@@ -227,7 +233,7 @@ export default function ChatTab({ result }: ChatTabProps) {
     }
   }
 
-  const hasNoKey = !GROQ_API_KEY;
+  const hasNoKey = !(import.meta.env.VITE_GROQ_API_KEY as string | undefined)?.trim();
 
   return (
     <div className="flex h-[600px] flex-col rounded-xl border border-border bg-surface overflow-hidden">
