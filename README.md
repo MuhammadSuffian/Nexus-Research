@@ -24,6 +24,7 @@ Nexus Research is a full-stack, serverless web application that automates academ
 > **What normally takes 4–8 hours of manual reading and writing, Nexus Research does in ~90 seconds.**
 
 ---
+Live App: https://nexus-research-psi.vercel.app/ 
 
 ##  Features at a Glance
 
