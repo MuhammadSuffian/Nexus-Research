@@ -17,7 +17,7 @@
 
 ---
 
-## ✨ What Is Nexus Research?
+##  What Is Nexus Research?
 
 Nexus Research is a full-stack, serverless web application that automates academic literature review. You type a research question — the platform searches **ArXiv**, runs a chain of **3 AI agents** to enrich, synthesize, visualize, and critique the results — and presents everything across **4 interactive views**, all in real-time.
 
@@ -25,19 +25,19 @@ Nexus Research is a full-stack, serverless web application that automates academ
 
 ---
 
-## 🖥️ Features at a Glance
+##  Features at a Glance
 
 | Feature | Description |
 |---------|-------------|
-| 📄 **Synthesis Tab** | AI-written executive summary, key findings, methodology, limitations & critical review |
-| 🗺️ **Mindmap Tab** | Interactive SVG knowledge graph — drag & pan to explore conceptual connections |
-| 📊 **Matrix Tab** | Sortable heatmap comparison table scoring each paper across multiple dimensions |
-| 💬 **Chat Tab** | Context-aware AI assistant grounded in your research synthesis |
-| 🧠 **Agent Log Panel** | Real-time sidebar showing each AI agent's progress live |
+|  **Synthesis Tab** | AI-written executive summary, key findings, methodology, limitations & critical review |
+|  **Mindmap Tab** | Interactive SVG knowledge graph — drag & pan to explore conceptual connections |
+|  **Matrix Tab** | Sortable heatmap comparison table scoring each paper across multiple dimensions |
+|  **Chat Tab** | Context-aware AI assistant grounded in your research synthesis |
+|  **Agent Log Panel** | Real-time sidebar showing each AI agent's progress live |
 
 ---
 
-## 🤖 The AI Agent Pipeline
+##  The AI Agent Pipeline
 
 When you submit a query, three AI agents run in sequence — each building on the previous one's output — and stream results back to the browser in real-time via **Server-Sent Events (SSE)**.
 
@@ -76,7 +76,7 @@ Query Submitted
 
 ---
 
-## 🛠️ Tech Stack
+##  Tech Stack
 
 ### Frontend
 | Technology | Version | Purpose |
@@ -106,7 +106,7 @@ Query Submitted
 
 ---
 
-## 🗄️ Database Schema
+##  Database Schema
 
 ```
 research_sessions     sources               synthesis_outputs     agent_logs
@@ -123,7 +123,7 @@ created_at            authors (text)        content (jsonb)       status (text)
 
 ---
 
-## 🚀 Getting Started
+##  Getting Started
 
 ### Prerequisites
 
@@ -238,7 +238,7 @@ Open [http://localhost:5173](http://localhost:5173) — you're ready to go! 🎉
 
 ---
 
-## 📁 Project Structure
+##  Project Structure
 
 ```
 nexus-research/
@@ -275,7 +275,7 @@ nexus-research/
 
 ---
 
-## 🔄 How the SSE Streaming Works
+##  How the SSE Streaming Works
 
 The Edge Function returns a **Server-Sent Events** stream, not a JSON response. The frontend reads this stream in real-time to update the Agent Log Panel as each agent completes.
 
@@ -293,7 +293,7 @@ SSE: pipeline_complete {all data}  → Tabs populate with results
 
 ---
 
-## 💡 Usage Tips
+##  Usage Tips
 
 - **Be specific with your query** — *"federated learning for medical image segmentation"* works better than *"AI in healthcare"*
 - **Start with the Synthesis Tab** — get the big picture first, then drill into Mindmap or Matrix
@@ -315,7 +315,7 @@ SSE: pipeline_complete {all data}  → Tabs populate with results
 
 ---
 
-## 🚧 Known Limitations
+##  Known Limitations
 
 - **ArXiv only** — currently fetches from ArXiv; PubMed, Semantic Scholar, etc. are not yet supported
 - **10 paper cap** — hardcoded `maxResults=10` in the ArXiv query
@@ -325,7 +325,7 @@ SSE: pipeline_complete {all data}  → Tabs populate with results
 
 ---
 
-## 🤝 Contributing
+##  Contributing
 
 Contributions are welcome! Here are some ideas:
 
@@ -338,7 +338,7 @@ Contributions are welcome! Here are some ideas:
 
 ---
 
-## 📄 License
+##  License
 
 MIT License — see [LICENSE](LICENSE) for details.
 
